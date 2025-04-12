@@ -1,0 +1,15 @@
+[package]
+name = "ps-range"
+description = "generalized range trait"
+version = "0.1.0-1"
+edition = "2021"
+license = "GPL-3.0-or-later"
+
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+opt-level = 3
+
+[dependencies]
+num-traits = "0.2.19"
