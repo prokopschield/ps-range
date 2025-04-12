@@ -223,3 +223,23 @@ impl<Idx: Clone + One + Ord + SaturatingAdd + Zero> PartialRange<Idx> for RangeT
         Some(self.end.saturating_add(&One::one()))
     }
 }
+
+impl<Idx: Clone + Ord, T: PartialRange<Idx>> PartialRange<Idx> for &T {
+    fn start(&self) -> Idx {
+        (*self).start()
+    }
+
+    fn end(&self) -> Option<Idx> {
+        (*self).end()
+    }
+}
+
+impl<Idx: Clone + Ord, T: Range<Idx>> Range<Idx> for &T {
+    fn start(&self) -> Idx {
+        (*self).start()
+    }
+
+    fn end(&self) -> Idx {
+        (*self).end()
+    }
+}
