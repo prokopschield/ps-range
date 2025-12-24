@@ -67,13 +67,11 @@ pub trait PartialRange<Idx: Clone + Ord = usize> {
 
 impl<Idx: Clone + Ord> PartialRange<Idx> for OpenRange<Idx> {
     #[inline]
-    #[must_use]
     fn start(&self) -> Idx {
         self.start.clone()
     }
 
     #[inline]
-    #[must_use]
     fn end(&self) -> Option<Idx> {
         self.end.clone()
     }
