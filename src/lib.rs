@@ -104,7 +104,7 @@ pub trait Range<Idx: Clone + Ord = usize> {
 
     #[inline]
     #[must_use]
-    fn intersection<T, R>(&self, other: &R) -> ops::Range<Idx>
+    fn intersection<T, R>(&self, other: R) -> ops::Range<Idx>
     where
         T: Clone + Ord + Into<Idx>,
         R: Range<T>,
