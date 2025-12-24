@@ -1,6 +1,6 @@
 [package]
 name = "ps-range"
-version = "0.1.0-2"
+version = "0.1.0-3"
 edition = "2021"
 description = "generalized range trait"
 license = "GPL-3.0-or-later"
