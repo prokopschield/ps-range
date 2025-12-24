@@ -168,7 +168,7 @@ impl<Idx: Copy + One + Ord + SaturatingAdd> Range<Idx> for ops::RangeInclusive<I
     }
 
     fn end(&self) -> Idx {
-        self.end().clone().saturating_add(&One::one())
+        self.end().saturating_add(&One::one())
     }
 }
 
@@ -178,7 +178,7 @@ impl<Idx: Copy + One + Ord + SaturatingAdd> PartialRange<Idx> for ops::RangeIncl
     }
 
     fn end(&self) -> Option<Idx> {
-        Some(self.end().clone().saturating_add(&One::one()))
+        Some(self.end().saturating_add(&One::one()))
     }
 }
 
