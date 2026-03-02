@@ -246,3 +246,23 @@ impl<Idx: Clone + Ord, T: Range<Idx>> Range<Idx> for &T {
         (*self).end()
     }
 }
+
+impl<Idx: Clone + Ord, T: PartialRange<Idx>> PartialRange<Idx> for &mut T {
+    fn start(&self) -> Idx {
+        (**self).start()
+    }
+
+    fn end(&self) -> Option<Idx> {
+        (**self).end()
+    }
+}
+
+impl<Idx: Clone + Ord, T: Range<Idx>> Range<Idx> for &mut T {
+    fn start(&self) -> Idx {
+        (**self).start()
+    }
+
+    fn end(&self) -> Idx {
+        (**self).end()
+    }
+}
