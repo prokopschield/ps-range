@@ -32,10 +32,15 @@ pub trait PartialRange<Idx: Clone + Ord = usize> {
     #[inline]
     #[must_use]
     fn clamp_left(&self, start: impl Into<Idx>) -> OpenRange<Idx> {
-        OpenRange {
-            start: self.start().max(start.into()),
-            end: self.end(),
-        }
+        let end = self.end();
+        let start = Ord::max(self.start(), start.into());
+
+        let start = match end.clone() {
+            Some(end) => Ord::min(start, end),
+            None => start,
+        };
+
+        OpenRange { start, end }
     }
 
     #[inline]
