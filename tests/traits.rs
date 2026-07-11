@@ -349,3 +349,101 @@ fn concrete_ranges_clamp_through_the_partial_trait() {
         Range::inclusive(5, 7)
     );
 }
+
+#[test]
+fn clamp_exclusive_preserves_negative_ranges_at_a_zero_end() {
+    assert_eq!((-5i32..0).clamp_exclusive(-10, 10), -5..0);
+    assert_eq!((-5i32..0).clamp_exclusive(-10, 0), -5..0);
+    assert_eq!((-5i32..=-1).clamp_exclusive(-10, 0), -5..0);
+}
+
+#[test]
+fn negative_end_only_ranges_are_empty_at_the_zero_anchor() {
+    assert!(PartialRangeExt::is_empty(&(..-5i32)));
+    assert!(PartialRangeExt::is_empty(&(..=-1i32)));
+    assert!((..-5i32).clamp_exclusive(-10, 10).is_empty());
+}
+
+#[test]
+fn clamp_anchors_agree_between_empty_and_disjoint_inputs() {
+    assert_eq!(
+        (5usize..5).clamp_right_exclusive(3usize),
+        (5usize..6).clamp_right_exclusive(3usize)
+    );
+    assert_eq!(
+        (5usize..5).clamp_right_inclusive(3usize),
+        (5usize..6).clamp_right_inclusive(3usize)
+    );
+}
+
+#[test]
+fn drained_inclusive_ranges_do_not_resurrect_through_partial_range_ext() {
+    let mut source = 5u8..=7;
+
+    source.by_ref().for_each(drop);
+
+    assert!(PartialRangeExt::is_empty(&source));
+    assert!(source.clamp_exclusive(0u8, 100u8).is_empty());
+    assert!(source.clamp_inclusive(0u8, 100u8).is_empty());
+    assert!(matches!(source.clamp_left(0u8), PartialRange::Empty { .. }));
+    assert!(matches!(
+        source.intersection(&(0u8..100)),
+        PartialRange::Empty { .. }
+    ));
+    assert!(matches!(
+        (0u8..100).intersection(&source),
+        PartialRange::Empty { .. }
+    ));
+}
+
+/// A `Clone` index type that is deliberately not `Copy`; it guards the trait
+/// bounds against a regression to `Copy`.
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+struct NonCopy(u8);
+
+impl std::ops::Add for NonCopy {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self {
+        Self(self.0 + rhs.0)
+    }
+}
+
+impl std::ops::Mul for NonCopy {
+    type Output = Self;
+
+    fn mul(self, rhs: Self) -> Self {
+        Self(self.0 * rhs.0)
+    }
+}
+
+impl num_traits::One for NonCopy {
+    fn one() -> Self {
+        Self(1)
+    }
+}
+
+#[test]
+fn clone_only_indices_satisfy_the_clamp_bounds() {
+    let range = NonCopy(5)..NonCopy(10);
+
+    assert_eq!(
+        range.clamp_exclusive(NonCopy(6), NonCopy(8)),
+        NonCopy(6)..NonCopy(8)
+    );
+    assert_eq!(
+        range.clamp_inclusive(NonCopy(6), NonCopy(8)),
+        Range::inclusive(NonCopy(6), NonCopy(8))
+    );
+}
+
+#[test]
+fn options_compose_with_clamp_results() {
+    let clamped = Some(5usize..10).clamp_left(20usize);
+
+    assert!(PartialRangeExt::is_empty(&clamped));
+    assert_eq!(
+        Some(clamped).clamp_left(30usize),
+        PartialRange::Empty { idx: 30 }
+    );
+}
