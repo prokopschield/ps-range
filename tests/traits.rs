@@ -78,8 +78,15 @@ fn drained_inclusive_ranges_do_not_resurrect_through_range_ext() {
 
 #[test]
 fn references_forward_range_ext() {
-    assert_eq!((2usize..8).end_exclusive(), Some(8));
-    assert_eq!((&mut (2usize..8)).clamp_right(6usize), 2..6);
+    fn end_exclusive_of<Idx: Clone + Ord, R: RangeExt<Idx>>(range: R) -> Option<Idx> {
+        range.end_exclusive()
+    }
+
+    let mut range = 2usize..8;
+
+    assert_eq!(end_exclusive_of(&range), Some(8));
+    assert_eq!(end_exclusive_of(&mut range), Some(8));
+    assert_eq!(range.clamp_right(6usize), 2..6);
 }
 
 #[test]
@@ -322,12 +329,15 @@ fn some_delegates_to_the_inner_range() {
 
 #[test]
 fn references_forward_partial_range_ext() {
-    assert_eq!(
-        PartialRangeExt::end_bound(&&(2usize..8)),
-        Some(RangeEnd::Exclusive(8))
-    );
-    assert_eq!((5usize..10).clamp_exclusive(6usize, 8usize), 6..8);
-    assert_eq!((&mut (5usize..10)).clamp_exclusive(6usize, 8usize), 6..8);
+    fn end_bound_of<Idx: Clone + Ord, R: PartialRangeExt<Idx>>(range: R) -> Option<RangeEnd<Idx>> {
+        range.end_bound()
+    }
+
+    let mut range = 5usize..10;
+
+    assert_eq!(end_bound_of(&range), Some(RangeEnd::Exclusive(10)));
+    assert_eq!(end_bound_of(&mut range), Some(RangeEnd::Exclusive(10)));
+    assert_eq!(range.clamp_exclusive(6usize, 8usize), 6..8);
 }
 
 #[test]

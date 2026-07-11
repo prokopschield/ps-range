@@ -120,7 +120,13 @@ mod tests {
 
     #[test]
     fn references_forward() {
-        assert_eq!((2usize..8).start(), 2);
-        assert_eq!((&mut (2usize..8)).start(), 2);
+        fn start_of<Idx, R: RangeStart<Idx>>(range: R) -> Idx {
+            range.start()
+        }
+
+        let mut range = 2usize..8;
+
+        assert_eq!(start_of(&range), 2);
+        assert_eq!(start_of(&mut range), 2);
     }
 }
