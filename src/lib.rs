@@ -9,6 +9,8 @@
 //! exclusive forms only where the converted bound is provably representable.
 #![warn(missing_docs)]
 
+mod range;
 mod start;
 
+pub use range::{Range, RangeEnd};
 pub use start::RangeStart;
