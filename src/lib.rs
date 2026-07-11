@@ -10,11 +10,13 @@
 #![warn(missing_docs)]
 
 mod partial_range;
+mod partial_range_ext;
 mod range;
 mod range_ext;
 mod start;
 
 pub use partial_range::PartialRange;
+pub use partial_range_ext::PartialRangeExt;
 pub use range::{Range, RangeEnd};
 pub use range_ext::RangeExt;
 pub use start::RangeStart;

@@ -104,6 +104,13 @@ impl<Idx: Clone> RangeStart<Idx> for Range<Idx> {
     }
 }
 
+impl<Idx: Clone + Ord> crate::PartialRangeExt<Idx> for Range<Idx> {
+    #[inline]
+    fn end_bound(&self) -> Option<RangeEnd<Idx>> {
+        Some(self.end.clone())
+    }
+}
+
 impl<Idx> From<std::ops::Range<Idx>> for Range<Idx> {
     #[inline]
     fn from(value: std::ops::Range<Idx>) -> Self {

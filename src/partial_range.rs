@@ -62,6 +62,19 @@ impl<Idx: Clone + Zero> RangeStart<Idx> for PartialRange<Idx> {
     }
 }
 
+impl<Idx: Clone + Ord + Zero> crate::PartialRangeExt<Idx> for PartialRange<Idx> {
+    #[inline]
+    fn end_bound(&self) -> Option<RangeEnd<Idx>> {
+        match self {
+            Self::Empty { idx } => Some(RangeEnd::Exclusive(idx.clone())),
+            Self::Exhausted => Some(RangeEnd::Exclusive(Idx::zero())),
+            Self::From { .. } => None,
+            Self::Inclusive { end, .. } => Some(RangeEnd::Inclusive(end.clone())),
+            Self::Exclusive { inner } => Some(RangeEnd::Exclusive(inner.end.clone())),
+        }
+    }
+}
+
 /// The size hint is conservative: an empty range reports an exact zero, and
 /// a non-empty range reports a lower bound of one with an unknown upper
 /// bound, since computing the exact length would require subtraction and a
