@@ -64,8 +64,10 @@ where
 
     /// Restricts the range to the window `start..exclusive_end`.
     ///
-    /// The result is slice-safe: its start does not exceed its end, and an
-    /// empty or disjoint input yields an empty range within the window.
+    /// The result is slice-safe: its start does not exceed its end, and its
+    /// end does not exceed the window's. An empty input yields an empty
+    /// range at its start clamped into the window; a disjoint input yields
+    /// one at the computed end, which may fall below the window's start.
     #[inline]
     #[must_use]
     fn clamp_exclusive(
@@ -105,9 +107,10 @@ where
 
     /// Restricts the range to the window `start..=inclusive_end`.
     ///
-    /// The result is always bounded, so it is expressed as a [`Range`]; an
-    /// empty or disjoint input yields an empty exclusive [`Range`] within
-    /// the window.
+    /// The result is always bounded, so it is expressed as a [`Range`]. An
+    /// empty input yields an empty exclusive [`Range`] at its start clamped
+    /// into the window; a disjoint input yields one at the computed end,
+    /// which may fall below the window's start.
     #[inline]
     #[must_use]
     fn clamp_inclusive(&self, start: impl Into<Idx>, inclusive_end: impl Into<Idx>) -> Range<Idx> {
