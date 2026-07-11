@@ -11,8 +11,10 @@
 
 mod partial_range;
 mod range;
+mod range_ext;
 mod start;
 
 pub use partial_range::PartialRange;
 pub use range::{Range, RangeEnd};
+pub use range_ext::RangeExt;
 pub use start::RangeStart;
