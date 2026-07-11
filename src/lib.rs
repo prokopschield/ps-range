@@ -9,8 +9,10 @@
 //! exclusive forms only where the converted bound is provably representable.
 #![warn(missing_docs)]
 
+mod partial_range;
 mod range;
 mod start;
 
+pub use partial_range::PartialRange;
 pub use range::{Range, RangeEnd};
 pub use start::RangeStart;
