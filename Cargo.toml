@@ -8,6 +8,15 @@ license = "GPL-3.0-or-later"
 [dependencies]
 num-traits = "0.2.19"
 
+[lints]
+clippy.expect_used = "warn"
+clippy.nursery.level = "warn"
+clippy.nursery.priority = -1
+clippy.pedantic.level = "deny"
+clippy.pedantic.priority = -1
+clippy.redundant_pub_crate = "allow"
+clippy.unwrap_used = "deny"
+
 [profile.dev]
 opt-level = 3
 
